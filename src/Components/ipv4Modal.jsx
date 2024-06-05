@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import "../App.css"
+import "../App.css";
+
 const Ipv4Modal = () => {
-    const [ipv4, setIpv4] = useState('');
-    const [netmaskBits, setNetmaskBits] = useState('');
+    const [formdata, setFormdata] = useState({
+        ip: "",
+        netmaskBits: "",
+        numSubnets: ""
+    });
     const [result, setResult] = useState('');
     const [error, setError] = useState('');
 
@@ -14,14 +18,21 @@ const Ipv4Modal = () => {
 
     const isValidNetmaskBits = (bits) => {
         const bitValue = parseInt(bits, 10);
-        return bitValue >= 0 && bitValue <= 32;
+        return !isNaN(bitValue) && bitValue >= 0 && bitValue <= 32;
+    };
+
+    const isValidNumSubnets = (num) => {
+        const numValue = parseInt(num, 10);
+        return !isNaN(numValue) && numValue > 0;
     };
 
     const handleSubmit = async () => {
         setError('');
         setResult('');
 
-        if (!isValidIPv4(ipv4)) {
+        const { ip, netmaskBits, numSubnets } = formdata;
+
+        if (!isValidIPv4(ip)) {
             setError('La dirección IPv4 no es válida');
             return;
         }
@@ -31,9 +42,15 @@ const Ipv4Modal = () => {
             return;
         }
 
+        if (!isValidNumSubnets(numSubnets)) {
+            setError('La cantidad de subredes no es válida');
+            return;
+        }
+
         const data = {
-            ip: ipv4,
-            netmaskBits: parseInt(netmaskBits, 10)
+            ip,
+            netmaskBits: parseInt(netmaskBits, 10),
+            numSubnets: parseInt(numSubnets, 10)
         };
 
         try {
@@ -41,7 +58,16 @@ const Ipv4Modal = () => {
             setResult(JSON.stringify(response.data, null, 2));
         } catch (error) {
             setError('Hubo un error al enviar la solicitud');
+            console.log(error);
         }
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormdata({
+            ...formdata,
+            [name]: value
+        });
     };
 
     return (
@@ -52,18 +78,29 @@ const Ipv4Modal = () => {
                     <input
                         id="ipv4-input"
                         type="text"
+                        name="ip"
                         placeholder="Ingresa la Direccion IPv4"
                         className="input input-bordered w-full"
-                        value={ipv4}
-                        onChange={(e) => setIpv4(e.target.value)}
+                        value={formdata.ip}
+                        onChange={handleChange}
                     />
                     <input
                         id="netmask-input"
                         type="text"
+                        name="netmaskBits"
                         placeholder="Ingresa la Cantidad de bits de la mascara"
                         className="input input-bordered w-full"
-                        value={netmaskBits}
-                        onChange={(e) => setNetmaskBits(e.target.value)}
+                        value={formdata.netmaskBits}
+                        onChange={handleChange}
+                    />
+                    <input
+                        id="numSubnets"
+                        type="text"
+                        name="numSubnets"
+                        placeholder="Ingresa la Cantidad de subredes"
+                        className="input input-bordered w-full"
+                        value={formdata.numSubnets}
+                        onChange={handleChange}
                     />
                 </div>
                 <button className="btn btn-primary w-full mb-4" onClick={handleSubmit}>
