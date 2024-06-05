@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import "../App.css";
+import { FaNetworkWired } from "react-icons/fa";
+import { TbNetwork } from "react-icons/tb";
+import { MdNetworkWifi } from "react-icons/md";
+import { MdBroadcastOnPersonal } from "react-icons/md";
 
 const Ipv4Modal = () => {
     const [formdata, setFormdata] = useState({
@@ -8,7 +12,7 @@ const Ipv4Modal = () => {
         netmaskBits: "",
         numSubnets: ""
     });
-    const [result, setResult] = useState('');
+    const [result, setResult] = useState(null);
     const [error, setError] = useState('');
 
     const isValidIPv4 = (ip) => {
@@ -28,7 +32,6 @@ const Ipv4Modal = () => {
 
     const handleSubmit = async () => {
         setError('');
-        setResult('');
 
         const { ip, netmaskBits, numSubnets } = formdata;
 
@@ -55,7 +58,7 @@ const Ipv4Modal = () => {
 
         try {
             const response = await axios.post('https://upc-codex.tech:4261/API/V2/subnets', data);
-            setResult(JSON.stringify(response.data, null, 2));
+            setResult(response.data);
         } catch (error) {
             setError('Hubo un error al enviar la solicitud');
             console.log(error);
@@ -71,20 +74,29 @@ const Ipv4Modal = () => {
     };
 
     return (
-        <div className="flex flex-col lg:p-10 p-4 items-center justify-center h-screen w-full bg-base-200">
-            <div className="w-full lg:p-6 p-4 bg-base-100 rounded-lg h-full flex flex-col shadow-md">
-                <h1 className="text-2xl font-bold mb-4 text-base-content">IPv4 Port Range and Subnet Mask</h1>
-                <div className="mb-4 flex gap-5 items-center lg:flex-row flex-col justify-center">
-                    <input
-                        id="ipv4-input"
-                        type="text"
-                        name="ip"
-                        placeholder="Ingresa la Direccion IPv4"
-                        className="input input-bordered w-full"
-                        value={formdata.ip}
-                        onChange={handleChange}
-                    />
-                    <input
+        <div className="flex flex-col lg:px-10 lg:py-5 p-4 items-center justify-start min-h-screen w-full bg-base-200">
+            <div className="lg:w-4/5  lg:p-6 p-4 bg-base-100 rounded-lg h-full flex flex-col shadow-md">
+                <h1 className="text-2xl font-bold mb-4 text-base-content">Calculadora de Redes IPV4</h1>
+                <div className="mb-4 flex gap-5 items-center lg:flex-row flex-col justify-between w-full" >
+                    <label className="form-control w-full ">
+                        <div className="label">
+                            <span className="label-text">Direccion Ipv4</span>
+                        </div>
+                        <input
+                            id="ipv4-input"
+                            type="text"
+                            name="ip"
+                            placeholder="Ingresa la Direccion IPv4"
+                            className="input input-bordered w-full"
+                            value={formdata.ip}
+                            onChange={handleChange}
+                        />
+                    </label>
+                    <label className="form-control w-full">
+                        <div className="label">
+                            <span className="label-text">Bits de mascara de red</span>
+                        </div>
+                        <input
                         id="netmask-input"
                         type="text"
                         name="netmaskBits"
@@ -93,26 +105,46 @@ const Ipv4Modal = () => {
                         value={formdata.netmaskBits}
                         onChange={handleChange}
                     />
-                    <input
+                    </label>
+                    <label className="form-control w-full max-w-xs">
+                        <div className="label">
+                            <span className="label-text">Numero de subredes</span>
+                        </div>
+                        <input
                         id="numSubnets"
                         type="text"
                         name="numSubnets"
                         placeholder="Ingresa la Cantidad de subredes"
-                        className="input input-bordered w-full"
+                        className="input input-bordered "
                         value={formdata.numSubnets}
                         onChange={handleChange}
                     />
+                    </label>
+                   
                 </div>
                 <button className="btn btn-primary w-full mb-4" onClick={handleSubmit}>
                     Generar
                 </button>
                 {error && <div className="text-red-500">{error}</div>}
-                <div className="bg-base-200 rounded-lg p-4">
-                    <h2 className="text-lg font-bold mb-2 text-base-content">Results</h2>
-                    {result && (
-                        <pre className="typing-effect text-base-content whitespace-pre-wrap">{result}</pre>
-                    )}
-                </div>
+                <h2 className="text-lg font-bold mb-2 text-base-content">Resultado</h2>
+
+                {result && (
+
+                    <div className="bg-base-200 h-[450px] flex flex-col gap-2  overflow-y-auto rounded-lg  p-4">
+                        {Object.keys(result).map((subred, index) => (
+                            <div key={index} className=" mb-1">
+                                <div className='flex items-center gap-1'><FaNetworkWired /><p className="font-bold">Subred {index + 1}:</p></div>
+                                {result[subred].map((subnet, subnetIndex) => (
+                                    <div key={subnetIndex} className="pl-4 my-2 border-gray-500">
+                                        <div className='flex items-center gap-2'><TbNetwork /><p>Valor: {subnet.value}</p></div>
+                                        <p className='p-2 flex items-center gap-2'><MdNetworkWifi/>IP Range: {subnet.ipRange.start} - {subnet.ipRange.end}</p>
+                                        <p className='p-2 flex items-center gap-2'><MdBroadcastOnPersonal/>Broadcast Address: {subnet.broadcastAddr}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );
