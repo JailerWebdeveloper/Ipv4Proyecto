@@ -1,20 +1,84 @@
-.typing-effect {
-    overflow: hidden;
-    border-right: .15em solid orange;
-    white-space: nowrap;
-    margin: 0 auto;
-    letter-spacing: .15em;
-    animation: 
-        typing 3.5s steps(40, end),
-        blink-caret .75s step-end infinite;
-}
+.inputB {
+    background-color: #383838;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    word-wrap: break-word;
+    outline: 3px solid #383838;
+    height: 40px;
+    font-size: 17px;
+    text-align: center;
+    transition: all 0.5s;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+   }
+   
+   .inputB:hover {
+    border-top-width: 0.2em;
+    background-color: #f1e8e8;
+    color:#383838
+   }
+   
+   .inputB:focus {
+    background-color: #f1e8e8;
+   }
 
-@keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
-}
-
-@keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: orange }
-}
+ 
+  
+  td.bit {
+    border:1px solid black;
+    width:50px;
+    height:50px;
+    cellspacing:5px;
+    cellpadding:5px;
+    text-align:center;
+    font-size:30px;
+    background-color:#e3e3e3;
+  }
+  
+  td.space {
+    border-top:none;
+    border-bottom:none; 
+    width:30px;
+    height:60px;
+    cellspacing:5px;
+    cellpadding:5px;
+    text-align:center;
+    font-size:40px;
+  }
+  
+  .ip {
+    font-size:60px;
+    font-weight:600;
+    text-align:center;
+  }
+     
+  .activa {
+    background-color:#B5F9B3!important;
+  }
+  
+  .inactiva {
+    background-color:#e3e3e3;
+  }
+  
+  .mactiva {
+    background-color:#FDEBD0!important;
+  }
+  
+  .minactiva {
+    background-color:#d2d2d2;
+  }
+  
+  .valores {
+    text-align:center;
+    font-size:14px;
+    color:#666;
+  }
+  
+  .oculto{
+    display:none;
+  }
+  
+  .visible {
+    display:block;
+  }
