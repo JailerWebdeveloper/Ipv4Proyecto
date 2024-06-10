@@ -215,7 +215,7 @@ const Ipv4Modal = () => {
                 </button>
                 {error && <div className="text-red-500">{error}</div>}
                 <div role="tablist" className="tabs tabs-boxed">                    
-                    <a className={`tab  ${activeTab === 'details' ? 'tab-active' : ''}`} onClick={() => setActiveTab('details')}>Detalles</a>
+                    <a className={`tab tab-success ${activeTab === 'details' ? 'tab-active' : ''}`} onClick={() => setActiveTab('details')}>Detalles</a>
                     <a className={`tab ${activeTab === 'table' ? 'tab-active' : ''}`} onClick={() => setActiveTab('table')}>Tabla</a>
                 </div>
                 <h2 className="text-lg font-bold mb-2 text-base-content">Resultado</h2>
