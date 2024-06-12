@@ -45,20 +45,24 @@ const Ipv4Modal = () => {
             return;
         }
 
-        if (!isValidNetmaskBits(netmaskBits)) {
+        if (netmaskBits && numSubnets) {
+            setError('Solo debe ingresar Bits de máscara de red o Número de subredes, no ambos');
+            return;
+        }
+
+        if (netmaskBits && !isValidNetmaskBits(netmaskBits)) {
             setError('La cantidad de bits de la máscara no es válida');
             return;
         }
 
-        if (!isValidNumSubnets(numSubnets)) {
+        if (numSubnets && !isValidNumSubnets(numSubnets)) {
             setError('La cantidad de subredes no es válida');
             return;
         }
 
         const data = {
             ip,
-            netmaskBits: parseInt(netmaskBits, 10),
-            numSubnets: parseInt(numSubnets, 10)
+            ...(netmaskBits ? { netmaskBits: parseInt(netmaskBits, 10) } : { numSubnets: parseInt(numSubnets, 10) })
         };
 
         try {
@@ -82,8 +86,7 @@ const Ipv4Modal = () => {
         const { ip, netmaskBits, numSubnets } = formdata;
         const data = {
             ip,
-            netmaskBits: parseInt(netmaskBits, 10),
-            numSubnets: parseInt(numSubnets, 10)
+            ...(netmaskBits ? { netmaskBits: parseInt(netmaskBits, 10) } : { numSubnets: parseInt(numSubnets, 10) })
         };
 
         try {
@@ -106,8 +109,7 @@ const Ipv4Modal = () => {
         const { ip, netmaskBits, numSubnets } = formdata;
         const data = {
             ip,
-            netmaskBits: parseInt(netmaskBits, 10),
-            numSubnets: parseInt(numSubnets, 10)
+            ...(netmaskBits ? { netmaskBits: parseInt(netmaskBits, 10) } : { numSubnets: parseInt(numSubnets, 10) })
         };
 
         try {
