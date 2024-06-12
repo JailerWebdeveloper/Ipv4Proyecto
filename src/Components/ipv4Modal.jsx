@@ -189,10 +189,11 @@ const Ipv4Modal = () => {
                             id="netmask-input"
                             type="text"
                             name="netmaskBits"
-                            placeholder="Ingresa la Cantidad de bits de la máscara"
+                            placeholder={`${formdata.numSubnets !== "" ? "No puede ingresar Bits de mascara" : "Ingresa la Cantidad de Bits de mascara"}`}
                             className="inputB input-bordered w-full"
                             value={formdata.netmaskBits}
                             onChange={handleChange}
+                            disabled={formdata.numSubnets !== ""}
                         />
                     </label>
                     <label className="form-control w-full max-w-xs">
@@ -203,10 +204,11 @@ const Ipv4Modal = () => {
                             id="numSubnets"
                             type="text"
                             name="numSubnets"
-                            placeholder="Ingresa la Cantidad de subredes"
+                            placeholder={`${formdata.netmaskBits !== "" ? "No puede ingresar Cantidad" : "Ingresa la Cantidad de subredes"}`}
                             className="inputB "
                             value={formdata.numSubnets}
                             onChange={handleChange}
+                            disabled={formdata.netmaskBits !== ""}
                         />
                     </label>
                 </div>
